@@ -23,8 +23,46 @@
 	     (gnu packages version-control)
 	     (gnu packages emacs)
 	     (gnu packages compression)
+             (guix gexp)
+             (guix packages)
+             (guix git-download)
+             (guix build-system gnu)
+             (guix licenses)
+             (guix utils)
 	     (nongnu packages linux)
 	     (nongnu system linux-initrd))
+
+(define-public wideriver
+  (package
+    (name "wideriver")
+    (version "1.2.0")
+    (source
+     (origin
+       (method git-fetch)
+       (uri (git-reference
+             (url "https://github.com/alex-courtis/wideriver")
+             (commit version)))
+       (file-name (git-file-name name version))
+       (sha256
+        (base32 "16i0mzgxn32nrh5ajn0kb4xdwmsjg03amhasxhwyvspar5y4flhg"))))
+    (build-system gnu-build-system)
+
+    (arguments
+     (list
+      #:tests? #f
+      #:make-flags #~(list (string-append "PREFIX="
+                                          #$output)
+                           (string-append "CC="
+                                          #$(cc-for-target)))
+      #:phases #~(modify-phases %standard-phases
+                   (delete 'configure))))
+    (native-inputs (map specification->package+output (list "pkg-config")))
+    (inputs (map specification->package+output (list "wayland" "wayland-protocols" "wlroots")))
+    (home-page "https://github.com/alex-courtis/wideriver")
+    (synopsis "A set of riverWM layouts")
+    (description
+     "Tiling window manager for the river wayland compositor, inspired by dwm and xmonad.")
+    (license gpl3)))
 
 (define nonguix-pub-key
   (plain-file "nonguix-pub-key.pub"
@@ -41,7 +79,7 @@
          (q #89FBA276A976A8DE2A69774771A92C8C879E0F24614AAAAE23119608707B3F06#)))"))
 
 (operating-system
-  (kernel linux)
+  (kernel linux-xanmod)
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
   (host-name "Hikaco")
@@ -84,7 +122,7 @@
                %base-user-accounts))
 
   (packages (cons* 
-	      river foot fnott i3status-rust wl-clipboard grim slurp fontconfig fuzzel
+	      river foot fnott i3status-rust wl-clipboard grim slurp fontconfig fuzzel wideriver
                %base-packages))
 
   ;; Add services to the baseline: a DHCP client and

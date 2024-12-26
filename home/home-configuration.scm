@@ -12,21 +12,23 @@
              (gnu home services desktop)
              (gnu home services shepherd))
 
-(define-public iosevka-ss17
-  (package 
-    (name "Iosevka-ss17")
-    (version "32.2.1")
+(define-public font-zenbones-brainy
+  (package
+    (name "font-zenbones-brainy")
+    (version "2.100")
     (source
-      (origin
-        (method url-fetch/zipbomb)
-        (uri "https://github.com/be5invis/Iosevka/releases/download/v32.2.1/PkgTTF-IosevkaSS17-32.2.1.zip")
-        (sha256
-          (base32 "1z3k6310a3bsx6g7d0wfmnzrypy3lkf37gsy88b4ndx7flfrn5yw"))))
+     (origin
+       (method url-fetch/zipbomb)
+       (uri
+         "https://github.com/zenbones-theme/zenbones-mono/releases/download/v2.100/Zenbones-Brainy-TTF.zip")
+       (sha256
+        (base32 "05a9wn1dvppgkscx9bq4j568bxaw2la2gh6gzwny9bha2rs1ikpv"))))
     (build-system font-build-system)
-    (synopsis "iosevka recursive version")
-    (description "iosevka recursive version")
-    (home-page "https://github.com/be5invis/Iosevka")
-    (license silofl1.1)))
+    (home-page "https://github.com/zenbones-theme/zenbones-mono")
+    (synopsis "Comfy. Condensed. Coding.")
+    (description
+     "A custom Iosevka build drawing inspirations from various programming typefaces.")
+    (license (list silofl1.1))))
 
 (define %base-packages
   (map specification->package+output
@@ -50,10 +52,13 @@
              "font-google-material-design-icons"
              "font-recursive"
              "font-google-roboto"
+             "clang@19.1.4"
+             "ghc"
+             "cabal-install"
              "glib")))
 
 (home-environment
-  (packages (cons* iosevka-ss17 %base-packages))
+  (packages (cons* font-zenbones-brainy %base-packages))
   (services
    (list (service home-dbus-service-type)
          (service home-fish-service-type)

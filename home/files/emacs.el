@@ -50,7 +50,7 @@
        	 (prog-mode     . display-line-numbers-mode))
 
   :init
-  (add-to-list 'default-frame-alist '(font . "Iosevka SS17-14" ))
+  (add-to-list 'default-frame-alist '(font . "Zenbones Brainy-14" ))
   (electric-pair-mode 1)
   (display-time-mode 1)
   (scroll-bar-mode 0)
