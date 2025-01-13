@@ -40,7 +40,7 @@ main = do
 
   for_ [ R.riverSetCursorWarp
        , R.riverFocusFollowsCursor
-       , R.riverBackgroundColour "0xd0d7ca"
+       , R.riverBackgroundColour "0xfcf7ef"
        , R.riverBorderColourFocused "0xc4c4c4"
        , R.riverBorderColourUnfocused "0xe0e0e0"
        , R.riverSetRepeat "50" "250"

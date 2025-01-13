@@ -1,10 +1,15 @@
 (define-module (hikaco packages scx)
   #:use-module (gnu packages)
   #:use-module (gnu packages linux)
+  #:use-module (gnu packages compression)
+  #:use-module (gnu packages llvm)
+  #:use-module (gnu packages web)
+  #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages elf)
   #:use-module (guix packages)
   #:use-module (guix git-download)
   #:use-module (guix build-system meson)
-  #:use-module (guix licenses)
+  #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix gexp)
   #:use-module (guix utils))
 
@@ -24,12 +29,13 @@
    (build-system meson-build-system)
    (arguments
     (list
-     #:configure-flags (list 
-       "-D" #~(string-append "libbpf_a=" #$(file-append libbpf "/lib/libbpf.a")) 
-       "-D" #~(string-append "libbpf_h=" #$(file-append libbpf "/include/bpf")) 
+     #:configure-flags #~(list 
+       "-D" (string-append "libbpf_a=" #$(file-append libbpf "/lib/libbpf.a")) 
+       "-D" (string-append "libbpf_h=" #$(file-append libbpf "/include/bpf")) 
+       "-D" (string-append "bpftool=" "disabled")
        "-D" "enable_rust=false")))
-   (native-inputs (map specification->package+output (list "clang" "libbpf" "bpftool" "jq" "pkg-config")))
+   (native-inputs (list clang-19 libbpf bpftool jq pkg-config libelf zlib (list zstd "lib")))
    (synopsis "h")
    (description "b")
    (home-page "c")
-   (license gpl2)))
+   (license license:gpl2)))

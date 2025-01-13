@@ -18,7 +18,7 @@
   #:use-module (nongnu system linux-initrd))
  
 (operating-system
-  (kernel linux-xanmod)
+  (kernel linux)
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
   (host-name "Hikaco")

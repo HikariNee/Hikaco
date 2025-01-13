@@ -24,7 +24,6 @@
              "adwaita-icon-theme"
 	     "htop"
 	     "unzip"
-	     "git:send-email"
 	     "pipewire"
 	     "wireplumber"
              "pavucontrol"
@@ -37,12 +36,18 @@
              "ghc"
              "cabal-install"
              "libffi"
+             "mumi"
+             "notmuch"
+             "xdg-utils"
+             "offlineimap3"
+             "git"
+             "git:send-email"
+             "msmtp"
              "glib")))
-
 
 (define-public %hikari
   (home-environment
-   (packages (cons* wideriver scx-scheds pragmasevka %base-packages))
+   (packages (cons* wideriver pragmasevka %base-packages))
    (services
     (list (service home-dbus-service-type)
           (service home-fish-service-type)
@@ -61,7 +66,7 @@
     	       (provision '(hydroxide))
   	         (start
 		   #~(make-forkexec-constructor
- 	              (list #$(file-append (specification->package "hydroxide") "/bin/hydroxide") "smtp")))
+ 	              (list #$(file-append (specification->package "hydroxide") "/bin/hydroxide") "serve")))
  		 (stop #~(make-kill-destructor)))))
  
           (service home-files-service-type

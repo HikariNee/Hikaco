@@ -116,6 +116,11 @@
   (setq tab-always-indent 'complete)
   (setq read-extended-command-predicate #'command-completion-default-include-p))
 
+  (setq send-mail-function 'sendmail-send-it)
+  (setq sendmail-program "/usr/local/bin/msmtp")
+  (setq mail-specify-envelope-from t)
+  (setq message-sendmail-envelope-from 'header)
+  (setq mail-envelope-from 'header)
 
 
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
@@ -176,6 +181,9 @@
 (use-package elpher
    :ensure t
    :commands (elpher))
+
+(use-package notmuch
+   :ensure  t)
 
 (use-package corfu
    :ensure t
@@ -241,7 +249,7 @@
 (use-package ef-themes
   :ensure t
   :defer  2
-  :init (load-theme 'ef-elea-light :no-confirm))
+  :init (load-theme 'ef-cyprus :no-confirm))
 
 (use-package vertico
   :ensure t
