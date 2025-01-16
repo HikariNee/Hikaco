@@ -2,6 +2,7 @@
   #:use-module (hikaco packages pragmasevka)
   #:use-module (hikaco packages wideriver)
   #:use-module (hikaco packages scx)
+  #:use-module (hikaco packages brave)
   #:use-module (gnu home)
   #:use-module (gnu packages)
   #:use-module (gnu services)
@@ -47,7 +48,7 @@
 
 (define-public %hikari
   (home-environment
-   (packages (cons* wideriver pragmasevka %base-packages))
+   (packages (cons* wideriver pragmasevka brave %base-packages))
    (services
     (list (service home-dbus-service-type)
           (service home-fish-service-type)

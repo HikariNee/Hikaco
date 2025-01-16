@@ -277,15 +277,15 @@
    :defer  t)
 
 (use-package geiser-guile
-  :ensure  t
-  :init
-  (add-to-list 'geiser-guile-load-path "/home/hikari/opt/guix"))
+   :ensure  t
+   :init
+   (add-to-list 'geiser-guile-load-path "~/opt/guix"))
 
 (use-package puni
-  :ensure  t
-  :defer   2
-  :init
-  (puni-global-mode))
+   :ensure  t
+   :defer   2
+   :init
+   (puni-global-mode))
 
 (use-package eglot
    :defer  t

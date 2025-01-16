@@ -8,7 +8,7 @@ import System.Directory
 initialKeymap :: [[String]]
 initialKeymap =
   [ (R.riverNormalMap R.Super "Return" $ R.rSpawn "foot")
-  , (R.riverNormalMap R.Super "W" $ R.rSpawn "librewolf")
+  , (R.riverNormalMap R.Super "W" $ R.rSpawn "brave")
   , (R.riverNormalMap R.Super "Q" $ R.rClose)
   , (R.riverNormalMap R.SS "E" $ R.rExit)
   , (R.riverNormalMap R.Super "J" $ R.rFocusView R.Next)
@@ -40,13 +40,13 @@ main = do
 
   for_ [ R.riverSetCursorWarp
        , R.riverFocusFollowsCursor
-       , R.riverBackgroundColour "0xfcf7ef"
+       , R.riverBackgroundColour "0xf0ece0"
        , R.riverBorderColourFocused "0xc4c4c4"
        , R.riverBorderColourUnfocused "0xe0e0e0"
        , R.riverSetRepeat "50" "250"
        , R.riverDefaultLayout "wideriver"
        , R.riverRuleAdd "-app-id 'bar' csd"] R.callRiver
 
-  R.callExternal "wideriver" ["--layout", "left", "--stack", "dwindle","--count", "1", "--ratio", "0.5", "--outer-gaps", "4"] 
+  R.callExternal "wideriver" ["--layout", "left", "--stack", "dwindle","--count", "1", "--ratio", "0.5", "--outer-gaps", "8", "--inner-gaps", "8"] 
   R.callExternal "i3bar-river" []
 
