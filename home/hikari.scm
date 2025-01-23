@@ -1,8 +1,8 @@
 (define-module (hikaco home hikari)
   #:use-module (hikaco packages pragmasevka)
   #:use-module (hikaco packages wideriver)
-  #:use-module (hikaco packages scx)
   #:use-module (hikaco packages brave)
+  #:use-module (hikaco packages lamdera)
   #:use-module (gnu home)
   #:use-module (gnu packages)
   #:use-module (gnu services)
@@ -11,6 +11,7 @@
   #:use-module (gnu home services sound)
   #:use-module (gnu home services desktop)
   #:use-module (gnu home services shepherd)
+  #:use-module (gnu home services gnupg)
   #:use-module (guix gexp))
 
 (define %base-packages
@@ -44,14 +45,24 @@
              "git"
              "git:send-email"
              "msmtp"
-             "glib")))
+             "gnupg"
+             "pinentry"
+             "ripgrep"
+             "glib"
+             "python"
+	     "elm")))
 
 (define-public %hikari
   (home-environment
-   (packages (cons* wideriver pragmasevka brave %base-packages))
+   (packages (cons* wideriver pragmasevka brave lamdera %base-packages))
    (services
     (list (service home-dbus-service-type)
-          (service home-fish-service-type)
+          (service home-fish-service-type
+            (home-fish-configuration
+             (config
+	      (list
+	       (local-file "./files/solarized.fish")))))
+	    
           (simple-service 'emacs-daemon home-shepherd-service-type
             (list
               (shepherd-service
@@ -61,15 +72,6 @@
                      (list #$(file-append (specification->package "emacs-pgtk") "/bin/emacs") "--fg-daemon")))
                 (stop #~(make-kill-destructor)))))
 
- 	 (simple-service 'hydroxide home-shepherd-service-type
-            (list
-             (shepherd-service
-    	       (provision '(hydroxide))
-  	         (start
-		   #~(make-forkexec-constructor
- 	              (list #$(file-append (specification->package "hydroxide") "/bin/hydroxide") "serve")))
- 		 (stop #~(make-kill-destructor)))))
- 
           (service home-files-service-type
               `((".bashrc",                    (local-file "./files/bashrc"))))
  
@@ -81,4 +83,5 @@
                 ("gtk-3.0/settings.ini",       (local-file "./files/gtk-settings.ini"))
                 ("emacs/init.el",              (local-file "./files/emacs.el"))
                 ("fuzzel/fuzzel.ini",          (local-file "./files/fuzzel.ini"))))
-	  (service home-pipewire-service-type)))))
+	  (service home-pipewire-service-type)
+          (service home-gpg-agent-service-type)))))

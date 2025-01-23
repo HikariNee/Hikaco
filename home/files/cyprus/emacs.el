@@ -243,10 +243,17 @@
   :ensure t
   :defer  2)
 
-(use-package doom-themes
+(use-package autothemer
+  :ensure t)
+
+(use-package ef-themes
   :ensure t
   :defer  2
-  :init (load-theme 'doom-solarized-light :no-confirm))
+  :init (load-theme 'ef-cyprus :no-confirm))
+
+(use-package doom-themes
+  :ensure t
+  :defer  2)
 
 (use-package vertico
   :ensure t
@@ -277,9 +284,6 @@
    :ensure  t
    :init
    (add-to-list 'geiser-guile-load-path "~/opt/guix"))
-
-(use-package elm-mode
-   :ensure  t)
 
 (use-package puni
    :ensure  t
