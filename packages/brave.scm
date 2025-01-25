@@ -107,11 +107,13 @@
 				  (lambda _
 				    (let* ((bin (string-append #$output "/bin/"))
 					   (old-exe (string-append "/opt/brave.com/brave/" #$name))
-					   (exe (string-append bin "brave")))
+					   (exe (string-append bin "brave"))
+					   (gtk-share #$(file-append gtk+ "/share")))
 				      (mkdir-p bin)
 				      (symlink (string-append #$output "/share/brave.com/brave/brave") exe)
 				      (wrap-program exe
-						    '("CHROME_WRAPPER" = (#$name)))))))))
+						    '("CHROME_WRAPPER" = (#$name))
+						    `("XDG_DATA_DIRS" ":" prefix (,gtk-share)))))))))
     (inputs
      (list bzip2
            curl
@@ -119,6 +121,7 @@
            font-liberation
            gdk-pixbuf
            gtk
+	   gtk+
            harfbuzz
            libexif
            libglvnd
