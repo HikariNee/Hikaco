@@ -59,7 +59,7 @@
   (blink-cursor-mode -1)
   (pixel-scroll-precision-mode)
 
-  (setq history-length 25)
+  (setopt history-length 25)
   
   (savehist-mode 1)
   (save-place-mode 1)
@@ -67,34 +67,34 @@
   (electric-indent-mode 1)
   (global-auto-revert-mode 1)
 
-  (setq custom-file (locate-user-emacs-file "custom-vars.el"))
+  (setopt custom-file (locate-user-emacs-file "custom-vars.el"))
   (load custom-file 'noerror 'nomessage)
   
 
-  (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
-  (setq undo-limit (* 64 1024 1024)) ; 64 mb
-  (setq read-process-output-max (* 1024 1024 4))
+  (setopt electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+  (setopt undo-limit (* 64 1024 1024)) ; 64 mb
+  (setopt read-process-output-max (* 1024 1024 4))
   
-  (setq undo-strong-limit (* 96 1024 1024))
-  (setq undo-outer-limit (* 90 1024 1024))
+  (setopt undo-strong-limit (* 96 1024 1024))
+  (setopt undo-outer-limit (* 90 1024 1024))
 
-  (setq fill-column 80)
-  (setq frame-resize-pixelwise t)
-  (setq split-width-threshold 80)
-  (setq create-lockfiles nil)
-  (setq initial-scratch-message "")
+  (setopt fill-column 80)
+  (setopt frame-resize-pixelwise t)
+  (setopt split-width-threshold 80)
+  (setopt create-lockfiles nil)
+  (setopt initial-scratch-message "")
   
-  (setq make-backup-files nil)
-  (setq auto-save-list-file-prefix "~/.config/emacs/autosave/")
-  (setq auto-save-file-name-transforms '((".*" "~/.config/emacs/autosave" t)))
-  (setq inhibit-startup-message t)
-  (setq load-prefer-newer t)
-  (setq select-enable-clipboard t)
-  (setq confirm-nonexistent-file-or-buffer t)
-  (setq fast-but-imprecise-scrolling t)
-  (setq auto-save-default t)
-  (setq use-short-answers t)
-  (setq warning-minimum-level :emergency)
+  (setopt make-backup-files nil)
+  (setopt auto-save-list-file-prefix "~/.config/emacs/autosave/")
+  (setopt auto-save-file-name-transforms '((".*" "~/.config/emacs/autosave" t)))
+  (setopt inhibit-startup-message t)
+  (setopt load-prefer-newer t)
+  (setopt select-enable-clipboard t)
+  (setopt confirm-nonexistent-file-or-buffer t)
+  (setopt fast-but-imprecise-scrolling t)
+  (setopt auto-save-default t)
+  (setopt use-short-answers t)
+  (setopt warning-minimum-level :emergency)
 
   
   (setopt auto-revert-avoid-polling t)
@@ -104,23 +104,23 @@
   (setopt x-underline-at-descent-line nil)
   (setopt pgtk-wait-for-event-timeout 0)
 
-  (setq display-line-numbers-width 3)
-  (setq left-fringe-width 5)
-  (setq right-fringe-width 5)
-  (setq truncate-lines t)
-  (setq indent-tabs-mode nil)
-  (setq tab-width 2)
+  (setopt display-line-numbers-width 3)
+  (setopt left-fringe-width 5)
+  (setopt right-fringe-width 5)
+  (setopt truncate-lines t)
+  (setopt indent-tabs-mode nil)
+  (setopt tab-width 2)
 
-  (setq treesit-font-lock-level 4)
-  (setq inhibit-startup-echo-area-message (user-login-name))
-  (setq tab-always-indent 'complete)
-  (setq read-extended-command-predicate #'command-completion-default-include-p))
+  (setopt treesit-font-lock-level 4)
+  (setopt inhibit-startup-echo-area-message (user-login-name))
+  (setopt tab-always-indent 'complete)
+  (setopt read-extended-command-predicate #'command-completion-default-include-p))
 
-  (setq send-mail-function 'sendmail-send-it)
-  (setq sendmail-program "/usr/local/bin/msmtp")
-  (setq mail-specify-envelope-from t)
-  (setq message-sendmail-envelope-from 'header)
-  (setq mail-envelope-from 'header)
+  (setopt send-mail-function 'sendmail-send-it)
+  (setopt sendmail-program "/usr/local/bin/msmtp")
+  (setopt mail-specify-envelope-from t)
+  (setopt message-sendmail-envelope-from 'header)
+  (setopt mail-envelope-from 'header)
 
 
 (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
@@ -171,7 +171,7 @@
 (use-package project
    :defer  t
    :config
-   (setq project-vc-extra-root-markers '(".project.el" ".projectile" )))
+   (setopt project-vc-extra-root-markers '(".project.el" ".projectile" )))
 
 (use-package undo-fu
    :ensure t
@@ -273,10 +273,19 @@
    :ensure t
    :defer  t)
 
+(use-package geiser
+   :ensure  t
+   :config
+   (setopt geiser-default-implementation 'guile)
+   (setopt geiser-active-implementation '(guile))
+   (setopt geiser-implementations-alist '(((regexp "\\.scm$") guile))))
+
 (use-package geiser-guile
    :ensure  t
+   :after geiser
    :init
-   (add-to-list 'geiser-guile-load-path "~/opt/guix"))
+   (add-to-list 'geiser-guile-load-path "~/opt/guix")
+   (add-to-list 'geiser-guile-load-path "~/.config/sysguix/hikaco"))
 
 (use-package elm-mode
    :ensure  t)
@@ -294,12 +303,12 @@
           (python-ts-mode  . eglot-ensure))
 
    :init
-   (setq eglot-sync-connect 1
+   (setopt eglot-sync-connect 1
          eglot-connect-timeout 5
          eglot-autoshutdown t
          eglot-send-changes-idle-time 45)
 
-   (setq completion-category-overrides '((eglot (styles orderless))
+   (setopt completion-category-overrides '((eglot (styles orderless))
                                          (eglot-capf (styles orderless)))
 
           eglot-workspace-configuration '((haskell (plugin

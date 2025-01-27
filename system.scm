@@ -4,10 +4,7 @@
   #:use-module (gnu)
   #:use-module (gnu packages)
   #:use-module (gnu packages ssh)
-  #:use-module (gnu packages xdisorg)
-  #:use-module (gnu packages rust-apps)
-  #:use-module (gnu packages zig-xyz)
-  #:use-module (gnu packages image)
+  #:use-module (gnu packages networking)
   #:use-module (gnu services networking)
   #:use-module (gnu services ssh)
   #:use-module (gnu services desktop)
@@ -73,7 +70,9 @@
 
   ;; Add services to the baseline: a DHCP client and
   ;; an SSH server.
-  (services (append (list (service dhcp-client-service-type)
+  (services (append (list (service network-manager-service-type
+                            (network-manager-configuration
+                              (shepherd-requirement '(udev))))
                           (service nftables-service-type)
                           (service dbus-root-service-type)
                           (service elogind-service-type)
