@@ -15,7 +15,7 @@
   #:use-module (nongnu system linux-initrd))
  
 (operating-system
-  (kernel linux)
+  (kernel linux-6.6)
   (initrd microcode-initrd)
   (firmware (list linux-firmware))
   (host-name "Hikaco")
@@ -59,14 +59,15 @@
 
   (packages (append 
               (map specification->package+output (list
-	        "river"
+	              "river"
                 "foot"
-	        "i3status-rust"
+	              "i3status-rust"
        	        "wl-clipboard"
-	        "grim"
-	        "slurp"
-	        "fontconfig"
-	        "fuzzel")) %base-packages))
+	              "grim"
+	              "slurp"
+	              "fontconfig"
+	              "fuzzel"))
+              %base-packages))
 
   ;; Add services to the baseline: a DHCP client and
   ;; an SSH server.
@@ -92,15 +93,15 @@
 		    (modify-services %base-services
                       (guix-service-type config => (guix-configuration
                         (inherit config)
-	                (substitute-urls
-			  (append 
+	                      (substitute-urls
+			                  (append 
                             (list 
                               "https://substitutes.nonguix.org")
 	                    %default-substitute-urls))
-		          (authorized-keys
-			    (append 
+		                   (authorized-keys
+			                   (append 
                               (list 
                                nonguix-pub-key)
-			      %default-authorized-guix-keys))))))))
+			                      %default-authorized-guix-keys))))))))
 
 	

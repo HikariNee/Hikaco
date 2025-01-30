@@ -3,6 +3,7 @@
   #:use-module (hikaco packages wideriver)
   #:use-module (hikaco packages brave)
   #:use-module (hikaco packages lamdera)
+  #:use-module (hikaco packages mlton)
   #:use-module (gnu home)
   #:use-module (gnu packages)
   #:use-module (gnu services)
@@ -54,14 +55,10 @@
 
 (define-public %hikari
   (home-environment
-   (packages (cons* wideriver pragmasevka brave lamdera %base-packages))
+   (packages (cons* wideriver pragmasevka brave lamdera mlton %base-packages))
    (services
     (list (service home-dbus-service-type)
-          (service home-fish-service-type
-            (home-fish-configuration
-             (config
-	      (list
-	       (local-file "./files/solarized.fish")))))
+          (service home-fish-service-type)
 	    
           (simple-service 'emacs-daemon home-shepherd-service-type
             (list
