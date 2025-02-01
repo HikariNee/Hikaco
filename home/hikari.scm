@@ -18,17 +18,16 @@
 (define %base-packages
   (map specification->package+output
        (list "librewolf"
-	     "fish"
+      	     "fish"
              "emacs-pgtk"
              "fish-foreign-env"
-	     "hydroxide"
-	     "bibata-cursor-theme"
-	     "hicolor-icon-theme"
+	           "bibata-cursor-theme"
+	            "hicolor-icon-theme"
              "adwaita-icon-theme"
-	     "htop"
-	     "unzip"
-	     "pipewire"
-	     "wireplumber"
+	           "htop"
+	           "unzip"
+	           "pipewire"
+	           "wireplumber"
              "pavucontrol"
              "font-google-noto"
              "font-google-noto-sans-cjk"
@@ -51,7 +50,10 @@
              "ripgrep"
              "glib"
              "python"
-	     "elm")))
+	           "elm"
+             "sdl3"
+             "ninja"
+             "clang")))
 
 (define-public %hikari
   (home-environment
@@ -81,4 +83,4 @@
                 ("emacs/init.el",              (local-file "./files/emacs.el"))
                 ("fuzzel/fuzzel.ini",          (local-file "./files/fuzzel.ini"))))
 	  (service home-pipewire-service-type)
-          (service home-gpg-agent-service-type)))))
+    (service home-gpg-agent-service-type)))))

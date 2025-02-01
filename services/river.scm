@@ -1,8 +1,10 @@
 (define-module (hikaco services river)
   #:use-module (guix records)
-  #:use-module (gnu services)
-  #:use-module (gnu services shepherd)
-  #:use-module (gnu packages zig-xyz))
+  #:use-module (gnu home services)
+  #:use-module (gnu home services shepherd)
+  #:use-module (gnu packages zig-xyz)
+  #:use-module (guix gexp)
+  #:export (make-river-configuration))
 
 (define-syntax call/river
   (syntax-rules ()
@@ -42,11 +44,18 @@
   (keybinds river-configuration-keybinds))
 
 (define-public (home-river-shepherd-service config)
-  (define config-file #~(gexp->script (river-spawn-alist (river-keybinds config))))
+  (define config-file #~(program-file "init" (river-spawn-alist (river-keybinds config))))
+  
   (list (shepherd-service
          (documentation "RiverWM.")
          (requirement '(user-processes elogind dbus polkit))
-         (provision 'riverwm)
+         (provision '(riverwm))
          (start #~(make-forkexec-constructor #$(file-append river "-c" config-file)))
          (stop #~(make-kill-destructor)))))
 
+(define home-river-service-type
+  (service-type (name 'river)
+                (extensions
+                 (list (service-extension home-shepherd-service-type
+                                          home-river-shepherd-service)))
+                (description "Run riverWM.")))

@@ -287,6 +287,7 @@
   ("C-s" . consult-line)))
 
 (use-package haskell-mode :ensure t)
+(use-package sml-mode :ensure t)
 
 (use-package
  geiser
