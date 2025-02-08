@@ -3,9 +3,11 @@
   #:use-module (hikaco packages wideriver)
   #:use-module (hikaco packages brave)
   #:use-module (hikaco packages lamdera)
+  #:use-module (hikaco packages lld-as-ld)
   #:use-module (hikaco packages mlton)
   #:use-module (gnu home)
   #:use-module (gnu packages)
+  #:use-module (gnu packages version-control)
   #:use-module (gnu services)
   #:use-module (gnu home services)
   #:use-module (gnu home services shells)
@@ -19,22 +21,21 @@
   (map specification->package+output
        (list "librewolf"
       	     "fish"
-             "emacs-pgtk"
+             "emacs-lucid"
              "fish-foreign-env"
-	           "bibata-cursor-theme"
-	            "hicolor-icon-theme"
+	     "bibata-cursor-theme"
+	     "hicolor-icon-theme"
              "adwaita-icon-theme"
-	           "htop"
-	           "unzip"
-	           "pipewire"
-	           "wireplumber"
+	     "htop"
+	     "unzip"
+	     "pipewire"
+	     "wireplumber"
              "pavucontrol"
              "font-google-noto"
              "font-google-noto-sans-cjk"
              "font-google-noto-emoji"
              "font-google-material-design-icons"
              "font-google-roboto"
-             "gcc-toolchain"
              "ghc"
              "cabal-install"
              "libffi"
@@ -42,45 +43,45 @@
              "notmuch"
              "xdg-utils"
              "offlineimap3"
-             "git"
-             "git:send-email"
              "msmtp"
              "gnupg"
              "pinentry"
-             "ripgrep"
+             "ugrep"
              "glib"
              "python"
-	           "elm"
              "sdl3"
              "ninja"
-             "clang")))
+             "clang-toolchain"
+             "linux-libre-headers"
+             "ncurses"
+             "emacs-lsp-booster"
+             "eza")))
 
 (define-public %hikari
   (home-environment
-   (packages (cons* wideriver pragmasevka brave lamdera mlton %base-packages))
+   (packages (cons* git (list git "send-email") lld19-as-ld-wrapper wideriver pragmasevka brave mlton %base-packages))
    (services
     (list (service home-dbus-service-type)
-          (service home-fish-service-type)
-	    
+	  (service home-bash-service-type
+            (home-bash-configuration
+              (bashrc (list (local-file "./files/prompt.sh")))
+              (aliases '(("ls" . "eza")
+                         ("la"  . "eza -lbhHigUmuSa --time-style=long-iso --git --color-scale")))))  
           (simple-service 'emacs-daemon home-shepherd-service-type
             (list
               (shepherd-service
                 (provision '(emacs-daemon))
                 (start 
                   #~(make-forkexec-constructor 
-                     (list #$(file-append (specification->package "emacs-pgtk") "/bin/emacs") "--fg-daemon")))
+                     (list #$(file-append (specification->package "emacs-lucid") "/bin/emacs") "--fg-daemon")))
                 (stop #~(make-kill-destructor)))))
 
-          (service home-files-service-type
-              `((".bashrc",                    (local-file "./files/bashrc"))))
- 
           (service home-xdg-configuration-files-service-type
               `(("foot/foot.ini",              (local-file "./files/foot.ini"))
                 ("i3status-rust/config.toml",  (local-file "./files/i3status-rust.toml"))
                 ("i3bar-river/config.toml",    (local-file "./files/i3bar-river.toml"))
                 ("gtk-3.0/gtk.css",            (local-file "./files/gtk.css"))
                 ("gtk-3.0/settings.ini",       (local-file "./files/gtk-settings.ini"))
-                ("emacs/init.el",              (local-file "./files/emacs.el"))
                 ("fuzzel/fuzzel.ini",          (local-file "./files/fuzzel.ini"))))
 	  (service home-pipewire-service-type)
     (service home-gpg-agent-service-type)))))

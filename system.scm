@@ -39,13 +39,7 @@
   (file-systems (append (list (file-system
                                (device "/dev/sda4")
                                (mount-point "/")
-                               (type "ext4"))                               
-                              (file-system
-                               (mount-point "/tmp")
-                               (device "none")
-                               (type "tmpfs")
-                               (check? #f))) 
-
+                               (type "ext4"))) 
                       %base-file-systems))
 
   (swap-devices 
