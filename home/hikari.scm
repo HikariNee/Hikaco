@@ -15,6 +15,7 @@
   #:use-module (gnu home services desktop)
   #:use-module (gnu home services shepherd)
   #:use-module (gnu home services gnupg)
+  #:use-module (saayix packages lsp)
   #:use-module (guix gexp))
 
 (define %base-packages
@@ -55,33 +56,35 @@
              "linux-libre-headers"
              "ncurses"
              "emacs-lsp-booster"
-             "eza")))
+             "eza"
+             "codeberg-cli")))
 
 (define-public %hikari
   (home-environment
-   (packages (cons* git (list git "send-email") lld19-as-ld-wrapper wideriver pragmasevka brave mlton %base-packages))
+   (packages (cons* guile-lsp-server git (list git "send-email") lld19-as-ld-wrapper wideriver pragmasevka brave mlton %base-packages))
    (services
     (list (service home-dbus-service-type)
 	  (service home-bash-service-type
             (home-bash-configuration
-              (bashrc (list (local-file "./files/prompt.sh")))
-              (aliases '(("ls" . "eza")
-                         ("la"  . "eza -lbhHigUmuSa --time-style=long-iso --git --color-scale")))))  
+             (bashrc (list (local-file "./files/prompt.sh")))
+             (aliases '(("ls" . "eza")
+                        ("la"  . "eza -lbhHigUmuSa --time-style=long-iso --git --color-scale")))))  
+
           (simple-service 'emacs-daemon home-shepherd-service-type
-            (list
-              (shepherd-service
-                (provision '(emacs-daemon))
-                (start 
-                  #~(make-forkexec-constructor 
-                     (list #$(file-append (specification->package "emacs-lucid") "/bin/emacs") "--fg-daemon")))
-                (stop #~(make-kill-destructor)))))
+                          (list
+                           (shepherd-service
+                            (provision '(emacs-daemon))
+                            (start 
+                             #~(make-forkexec-constructor 
+                                (list #$(file-append (specification->package "emacs-lucid") "/bin/emacs") "--fg-daemon")))
+                            (stop #~(make-kill-destructor)))))
 
           (service home-xdg-configuration-files-service-type
-              `(("foot/foot.ini",              (local-file "./files/foot.ini"))
-                ("i3status-rust/config.toml",  (local-file "./files/i3status-rust.toml"))
-                ("i3bar-river/config.toml",    (local-file "./files/i3bar-river.toml"))
-                ("gtk-3.0/gtk.css",            (local-file "./files/gtk.css"))
-                ("gtk-3.0/settings.ini",       (local-file "./files/gtk-settings.ini"))
-                ("fuzzel/fuzzel.ini",          (local-file "./files/fuzzel.ini"))))
+                   `(("foot/foot.ini",              (local-file "./files/foot.ini"))
+                     ("i3status-rust/config.toml",  (local-file "./files/i3status-rust.toml"))
+                     ("i3bar-river/config.toml",    (local-file "./files/i3bar-river.toml"))
+                     ("gtk-3.0/gtk.css",            (local-file "./files/gtk.css"))
+                     ("gtk-3.0/settings.ini",       (local-file "./files/gtk-settings.ini"))
+                     ("fuzzel/fuzzel.ini",          (local-file "./files/fuzzel.ini"))))
 	  (service home-pipewire-service-type)
-    (service home-gpg-agent-service-type)))))
+          (service home-gpg-agent-service-type)))))

@@ -92,7 +92,7 @@
 				    (let* ((icons (string-append #$output "/share/brave.com/brave"))
 					   (pl (string-append #$output "/share/icons/hicolor"))
 				           (files (find-files icons "product_logo_.*\\.*")))
-				      				      
+				      
 				      (for-each (lambda (file)
 						  (let* ((icon-name (basename file))
 							 (icon-size (string-drop-right (string-drop icon-name 13) 4))
@@ -101,8 +101,8 @@
 						    (rename-file
 						     (string-append target "/" icon-name)
 						     (string-append target "/" "brave-browser.png"))))
-				       files))))
-				  
+				                files))))
+		      
 		      (add-before 'install-wrapper 'install-exe
 				  (lambda _
 				    (let* ((bin (string-append #$output "/bin/"))
@@ -114,34 +114,34 @@
 				      (wrap-program exe
 						    '("CHROME_WRAPPER" = (#$name))
 						    `("XDG_DATA_DIRS" ":" prefix (,gtk-share)))))))))
-    (inputs
-     (list bzip2
-           curl
-           flac
-           font-liberation
-           gdk-pixbuf
-           gtk
-	   gtk+
-           harfbuzz
-           libexif
-           libglvnd
-           libpng
-           libva
-           libxscrnsaver
-           opus
-           pciutils
-           pipewire
-           qtbase-5
-           qtbase
-           snappy
-	   nss
-	   util-linux
-           xdg-utils
-           wget))
+   (inputs
+    (list bzip2
+          curl
+          flac
+          font-liberation
+          gdk-pixbuf
+          gtk
+	  gtk+
+          harfbuzz
+          libexif
+          libglvnd
+          libpng
+          libva
+          libxscrnsaver
+          opus
+          pciutils
+          pipewire
+          qtbase-5
+          qtbase
+          snappy
+	  nss
+	  util-linux
+          xdg-utils
+          wget))
 
-    (synopsis
-     "Brave is a free and open-source web browser developed by Brave Software, Inc.")
-    (description
-     "based on the Chromium web browser, Brave is a privacy-focused browser, which automatically blocks most advertisements and website trackers in its default settings.")
+   (synopsis
+    "Brave is a free and open-source web browser developed by Brave Software, Inc.")
+   (description
+    "based on the Chromium web browser, Brave is a privacy-focused browser, which automatically blocks most advertisements and website trackers in its default settings.")
    (home-page "https://github.com/brave/brave-browser")
    (license mpl2.0)))

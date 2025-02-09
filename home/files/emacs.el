@@ -83,6 +83,9 @@
   (setq-default indent-tabs-mode nil)
   (setopt tab-always-indent 'complete)
 
+  ;; Mail stuff.
+  (setopt mail-signature t)
+  
   ;; Eglot stuff.
   (setopt eglot-sync-connect 1)
   (setopt eglot-send-changes-idle-time 45)
