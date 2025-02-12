@@ -1,0 +1,63 @@
+#!/run/current-system/profile/bin/guile
+!#
+
+(define-syntax river-set
+  (syntax-rules ()
+    ((river-set opt mod key p)
+     (system* "riverctl" "map" "normal" mod key opt p))))
+  
+(define (river-set-keybinds mode alist)
+  (let ((split-at-delim (lambda (x) (string-split (car x) #\-))))
+    (map
+     (lambda (x)
+       (river-set  mode
+                   (car (split-at-delim x))
+                   (car (cdr (split-at-delim x)))
+                   (cdr x)))
+     alist)))
+
+(define (set-tags range)
+  (if (null? range)
+      '()
+      (let ((tags (number->string (round-ash 1 (- (car range) 1))))
+            (key  (number->string (car range))))
+        (river-set "set-focused-tags" "Super" key tags)
+        (river-set "set-view-tags" "Super+Shift" key tags)
+        (river-set "toggle-focused-tags" "Super+Control" key tags)
+        (river-set "toggle-view-tags" "Super+Shift+Control" key tags)
+        (set-tags (cdr range)))))
+
+(river-set-keybinds "spawn"                        
+                        '(("Super-Return" . "foot")
+                          ("Super-W" . "cromite")
+                          ("Super-Print" . "grim -g \"$(slurp)\" - | wl-copy -t image/png")
+                          ("Super-X" . "fuzzel")))
+
+(river-set-keybinds "exit"
+                        '(("Super+Shift-E" . "")))
+
+(river-set-keybinds "close"
+                        '(("Super-Q" . "")))
+
+(river-set-keybinds "focus-view"
+                        '(("Super-J" . "next")
+                          ("Super-K" . "previous")))
+
+(river-set-keybinds "swap"
+                        '(("Super+Shift-J" . "next")
+                          ("Super+Shift-K" . "previous")))
+
+(set-tags '(1 2 3 4 5 6 7 8 9))
+
+(let ((tags (number->string (- (round-ash 1 8) 1))))
+  (river-set "set-focused-tags" "Super" "0" tags)
+  (river-set "set-view-tags" "Super+Shift" "0" tags))
+
+(system* "riverctl" "background-color" "0xededed")
+(system* "riverctl" "border-color-focused" "0xc4c4c4")
+(system* "riverctl" "border-color-unfocused" "0xe0e0e0")
+(system* "riverctl" "set-repeat" "50" "250")
+(system* "riverctl" "default-layout" "wideriver")
+
+(spawn "i3bar-river" '("i3bar-river"))
+(spawn "wideriver" '("wideriver" "--layout"  "left"  "--stack"  "dwindle" "--count"  "1"  "--ratio"  "0.5"  "--outer-gaps"  "8"  "--inner-gaps"  "8"))

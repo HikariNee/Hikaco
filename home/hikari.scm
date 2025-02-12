@@ -1,7 +1,7 @@
 (define-module (hikaco home hikari)
   #:use-module (hikaco packages pragmasevka)
   #:use-module (hikaco packages wideriver)
-  #:use-module (hikaco packages brave)
+  #:use-module (hikaco packages cromite)
   #:use-module (hikaco packages lamdera)
   #:use-module (hikaco packages lld-as-ld)
   #:use-module (hikaco packages mlton)
@@ -15,13 +15,11 @@
   #:use-module (gnu home services desktop)
   #:use-module (gnu home services shepherd)
   #:use-module (gnu home services gnupg)
-  #:use-module (saayix packages lsp)
   #:use-module (guix gexp))
 
 (define %base-packages
   (map specification->package+output
-       (list "librewolf"
-      	     "fish"
+       (list "fish"
              "emacs-lucid"
              "fish-foreign-env"
 	     "bibata-cursor-theme"
@@ -57,11 +55,12 @@
              "ncurses"
              "emacs-lsp-booster"
              "eza"
-             "codeberg-cli")))
+             "codeberg-cli"
+             "universal-ctags")))
 
 (define-public %hikari
   (home-environment
-   (packages (cons* guile-lsp-server git (list git "send-email") lld19-as-ld-wrapper wideriver pragmasevka brave mlton %base-packages))
+   (packages (cons* git (list git "send-email") lld19-as-ld-wrapper wideriver pragmasevka cromite mlton %base-packages))
    (services
     (list (service home-dbus-service-type)
 	  (service home-bash-service-type
